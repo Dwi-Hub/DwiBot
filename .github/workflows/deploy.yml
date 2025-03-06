@@ -1,0 +1,29 @@
+name: Run Discord Bot in Cloud
+
+on:
+  push:
+    branches:
+      - main  # Workflow akan berjalan setiap ada push ke branch `main`
+  workflow_dispatch:  # Memungkinkan menjalankan workflow secara manual
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'  # Sesuaikan dengan versi yang kompatibel
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run bot
+        env:
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node bot.js
